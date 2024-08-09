@@ -1,0 +1,62 @@
+
+name: Build SmartDNS Conf
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "33 3 * * *"
+
+env:
+  REPO_URL: https://github.com/felixonmars/dnsmasq-china-list
+  REPO_BRANCH: master
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install make
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone "Asia/Shanghai"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+
+    - name: Clone source code
+      run: |
+        cd /workdir
+        git clone $REPO_URL -b $REPO_BRANCH dnsmasq-china-list --depth 1
+
+    - name: Compile
+      run: cd /workdir/dnsmasq-china-list && make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
+
+    - name: Compile again
+      run: cd /workdir/dnsmasq-china-list && wget https://raw.githubusercontent.com/imyip/Chnroute/master/dist/chnroute/chinalist.txt -O chinalist.txt && sed -e "s|\(.*\)|domain-rules /\1/ -speed-check-mode tcp:80 -address - -nameserver domestic|" chinalist.txt > chinalist.domain.smartdns.conf
+
+    - name: Compile again again
+      run: cd /workdir/dnsmasq-china-list && wget https://raw.githubusercontent.com/imyip/Chnroute/master/dist/chnroute/gfwlist.txt -O gfwlist.txt && sed -e "s|\(.*\)|domain-rules /\1/ -speed-check-mode none -nameserver gfw|" gfwlist.txt > gfwlist.domain.smartdns.conf
+
+    - name: Checkout
+      uses: actions/checkout@master
+      with:
+         token: ${{ secrets.GITHUB_TOKEN  }}
+
+    - name: Copy files
+      run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./
+      
+    - name: Commit & Push changes
+      uses: actions-js/push@master
+      with:
+         github_token: ${{ secrets.GITHUB_TOKEN  }}
+
+    - name: Delete workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      with:
+         retain_days: 1
+         keep_minimum_runs: 3
