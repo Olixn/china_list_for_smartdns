@@ -1,3 +1,31 @@
+# 一些文件说明  
+- `accelerated-domains.china.domain.smartdns.conf` 要加速的通用域名。
+使用中国 DNS 服务器时，这些域名具有更好的解析速度和/或结果。
+> 要确定域名是否符合条件，必须满足以下条件之一:
+> 1. 该域名的NS服务器位于中国大陆。
+> 2. 使用中国 DNS 服务器时，域名会解析为位于中国大陆的 IP，但使用国外 DNS 服务器时则不一定会解析到位于中国大陆的 IP（例如节点在中国的 CDN 加速站> 点）。但这不包括在中国大陆附近设有节点的节点，例如日本、香港、台湾等。
+
+- `google.china.domain.smartdns.conf` 要加速的 Google 域名。
+使用中国 DNS 时，这些域名将解析为 Google 中国服务器。在大多数情况下，这将为使用 Google 网络服务的网站带来更好的页面加载时间，例如Google 网络字体和 AdSense。
+***请记住，它们不被认为是稳定的。使用风险自负。***
+
+- `apple.china.domain.smartdns.conf` 要加速的Apple域名。
+一些 ISP（通常是较小的 ISP）在使用其中国大陆 CDN 服务器访问 Apple 的资产时遇到问题。如果您遇到这种情况，请考虑删除此文件。有关更多信息，请参阅[#156](https://github.com/felixonmars/dnsmasq-china-list/issues/156)。
+
+# 更新规则路由器
+```
+wget -O /root/chinaList/apple.china.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/apple.china.domain.smartdns.conf
+
+wget -O  /root/chinaList/chinalist.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/chinalist.domain.smartdns.conf
+
+wget -O  /root/chinaList/gfwlist.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/gfwlist.domain.smartdns.conf
+
+wget -O  /root/chinaList/google.china.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/google.china.domain.smartdns.conf
+
+wget -O  /root/chinaList/accelerated-domains.china.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/accelerated-domains.china.domain.smartdns.conf
+
+```
+
 # 配置 SmartDNS 上游和仅测速国内域名
 如前文所说，在本地解析需要被代理的域名时，不需要测速、也不一定要绝对准确，只需要解析得到的 IP 不会干扰 Surge/Clash 分流即可；只将国内的递归 DNS 作为上游解析国内直连域名，也只对其进行测速。因此，我们使用「白名单」策略，默认解析不测速、不使用国内递归 DNS 作为上游。
 
@@ -45,7 +73,7 @@ conf-file /path/to/dnsmasq-china-list/accelerated-domains.china.domain.smartdns.
 conf-file /path/to/dnsmasq-china-list/apple.china.domain.smartdns.conf
 ```
 ---------------------
-本文著作权归作者 Sukka 所有。本文采用 CC BY-NC-SA 4.0 许可协议，商业转载请联系作者获得授权，非商业转载请注明出处。
-作者：Sukka
-来源：我有特别的 DNS 配置和使用技巧
-链接：https://blog.skk.moe/post/i-have-my-unique-dns-setup/
+本文著作权归作者 Sukka 所有。本文采用 CC BY-NC-SA 4.0 许可协议，商业转载请联系作者获得授权，非商业转载请注明出处。  
+作者：Sukka  
+来源：我有特别的 DNS 配置和使用技巧  
+链接：https://blog.skk.moe/post/i-have-my-unique-dns-setup/  
