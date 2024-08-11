@@ -1,3 +1,11 @@
+# 本仓库北京时间每天11:33自动更新
+
+# 定时更新规则到路由器
+1. 上传`update_rules.sh`到路由器`/etc/smartdns`目录下
+2. 执行`chmod +x update_rules.sh`
+3. 第一次使用可立即执行`/etc/smartdns/update_rules.sh`
+4. 设置定时更新，执行`crontab -e`创建定时任务，每天凌晨4点执行`0 4 * * * /etc/smartdns/update_rules.sh`
+
 # 一些文件说明  
 - `accelerated-domains.china.domain.smartdns.conf` 要加速的通用域名。
 使用中国 DNS 服务器时，这些域名具有更好的解析速度和/或结果。
@@ -11,20 +19,6 @@
 
 - `apple.china.domain.smartdns.conf` 要加速的Apple域名。
 一些 ISP（通常是较小的 ISP）在使用其中国大陆 CDN 服务器访问 Apple 的资产时遇到问题。如果您遇到这种情况，请考虑删除此文件。有关更多信息，请参阅[#156](https://github.com/felixonmars/dnsmasq-china-list/issues/156)。
-
-# 更新规则路由器
-```
-wget -O /root/chinaList/apple.china.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/apple.china.domain.smartdns.conf
-
-wget -O  /root/chinaList/chinalist.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/chinalist.domain.smartdns.conf
-
-wget -O  /root/chinaList/gfwlist.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/gfwlist.domain.smartdns.conf
-
-wget -O  /root/chinaList/google.china.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/google.china.domain.smartdns.conf
-
-wget -O  /root/chinaList/accelerated-domains.china.domain.smartdns.conf https://raw.githubusercontent.com/Olixn/china_list_for_smartdns/main/accelerated-domains.china.domain.smartdns.conf
-
-```
 
 # 配置 SmartDNS 上游和仅测速国内域名
 如前文所说，在本地解析需要被代理的域名时，不需要测速、也不一定要绝对准确，只需要解析得到的 IP 不会干扰 Surge/Clash 分流即可；只将国内的递归 DNS 作为上游解析国内直连域名，也只对其进行测速。因此，我们使用「白名单」策略，默认解析不测速、不使用国内递归 DNS 作为上游。
