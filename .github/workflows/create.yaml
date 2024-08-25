@@ -37,10 +37,10 @@ jobs:
       run: cd /workdir/dnsmasq-china-list && make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
 
     - name: Compile again
-      run: cd /workdir/dnsmasq-china-list && wget https://raw.githubusercontent.com/imyip/Chnroute/master/dist/chnroute/chinalist.txt -O chinalist.txt && sed -e "s|\(.*\)|domain-rules /\1/ -speed-check-mode tcp:80 -address - -nameserver domestic|" chinalist.txt > chinalist.domain.smartdns.conf
+      run: cd /workdir/dnsmasq-china-list && wget https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/china-list.txt -O chinalist.txt && sed -e "s|\(.*\)|domain-rules /\1/ -speed-check-mode tcp:80 -address - -nameserver domestic|" chinalist.txt > chinalist.domain.smartdns.conf
 
     - name: Compile again again
-      run: cd /workdir/dnsmasq-china-list && wget https://raw.githubusercontent.com/imyip/Chnroute/master/dist/chnroute/gfwlist.txt -O gfwlist.txt && sed -e "s|\(.*\)|domain-rules /\1/ -speed-check-mode none -nameserver gfw|" gfwlist.txt > gfwlist.domain.smartdns.conf
+      run: cd /workdir/dnsmasq-china-list && wget https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt -O gfwlist.txt && sed -e "s|\(.*\)|domain-rules /\1/ -speed-check-mode none -nameserver gfw|" gfwlist.txt > gfwlist.domain.smartdns.conf
 
     - name: Checkout
       uses: actions/checkout@master
