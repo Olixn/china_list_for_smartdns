@@ -1,5 +1,9 @@
 # 本仓库北京时间每天11:33自动更新
 
+# 数据来源
+- [dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list)
+- [v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat)
+
 # 定时更新规则到路由器
 1. 上传`update_rules.sh`到路由器`/etc/smartdns`目录下
 2. 执行`chmod +x update_rules.sh`
